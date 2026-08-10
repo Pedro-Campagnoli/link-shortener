@@ -1,0 +1,41 @@
+services:
+    pgsql:
+        image: 'postgres:18-alpine'
+        container_name: link-shortener-pgsql
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: '${DB_DATABASE:-link_shortener}'
+            POSTGRES_USER: '${DB_USERNAME:-laravel}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+        ports:
+            - '${DB_PORT:-5432}:5432'
+        volumes:
+            # Postgres 18+ expects the mount one level above the data directory.
+            - 'pgsql-data:/var/lib/postgresql'
+        configs:
+            # Runs once, the first time the volume is initialised. Gives the test
+            # suite its own database so running tests never wipes local data.
+            - source: create-testing-database
+              target: /docker-entrypoint-initdb.d/10-create-testing-database.sql
+        healthcheck:
+            test:
+                - CMD
+                - pg_isready
+                - '-q'
+                - '-d'
+                - '${DB_DATABASE:-link_shortener}'
+                - '-U'
+                - '${DB_USERNAME:-laravel}'
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 30s
+
+configs:
+    create-testing-database:
+        content: |
+            CREATE DATABASE link_shortener_testing;
+
+volumes:
+    pgsql-data:
+        driver: local
