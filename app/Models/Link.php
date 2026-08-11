@@ -29,20 +29,10 @@ class Link extends Model
     /** @use HasFactory<LinkFactory> */
     use HasFactory;
 
-    /**
-     * The model's default attribute values.
-     *
-     * @var array<string, mixed>
-     */
     protected $attributes = [
         'visits' => 0,
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -51,19 +41,12 @@ class Link extends Model
         ];
     }
 
-    /**
-     * The public short URL that redirects to the destination.
-     *
-     * @return Attribute<string, never>
-     */
+    /** @return Attribute<string, never> */
     protected function shortUrl(): Attribute
     {
         return Attribute::get(fn (): string => route('links.redirect', $this->code));
     }
 
-    /**
-     * Count one visit against this link.
-     */
     public function recordVisit(): void
     {
         $this->increment('visits', 1, ['last_visited_at' => now()]);

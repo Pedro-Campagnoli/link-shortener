@@ -12,8 +12,6 @@ use Illuminate\Support\Str;
 class LinkFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -24,9 +22,6 @@ class LinkFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the link has already been visited.
-     */
     public function visited(int $visits = 5): static
     {
         return $this->state(fn (): array => [
