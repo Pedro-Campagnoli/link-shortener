@@ -9,19 +9,11 @@ use RuntimeException;
 
 class ShortenUrl
 {
-    /**
-     * Number of characters in a generated code.
-     */
     private const CODE_LENGTH = 7;
 
-    /**
-     * How many times to retry when a generated code is already taken.
-     */
     private const MAX_ATTEMPTS = 5;
 
     /**
-     * Store a destination URL behind a short code.
-     *
      * The unique index on "code" is the source of truth: a colliding insert is
      * retried with a new code rather than checked for beforehand, which would
      * leave a race between the check and the insert.

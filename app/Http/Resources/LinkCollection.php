@@ -8,11 +8,7 @@ use Illuminate\Support\Arr;
 
 class LinkCollection extends ResourceCollection
 {
-    /**
-     * The resource that this resource collects.
-     *
-     * @var class-string<LinkResource>
-     */
+    /** @var class-string<LinkResource> */
     public $collects = LinkResource::class;
 
     /**

@@ -17,17 +17,11 @@ class LinkController extends Controller
 {
     public function __construct(private readonly ShortenUrl $shortenUrl) {}
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): LinkCollection
     {
         return new LinkCollection(Link::latest()->paginate());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreLinkRequest $request): JsonResponse
     {
         $link = $this->shortenUrl->handle(
@@ -40,17 +34,12 @@ class LinkController extends Controller
             ->setStatusCode(HttpStatus::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Link $link): LinkResource
     {
         return new LinkResource($link);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
      * Only the destination changes: the code, and therefore every short URL
      * already shared, keeps pointing at this link. Visit counts are kept too.
      */
@@ -61,9 +50,6 @@ class LinkController extends Controller
         return new LinkResource($link);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Link $link): Response
     {
         $link->delete();
